@@ -35,9 +35,15 @@ fun FlowTimerTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composa
         LightColorPalette
     }
 
+    val typography = if (darkTheme) {
+        DarkTypography
+    } else {
+        Typography
+    }
+
     MaterialTheme(
         colors = colors,
-        typography = Typography,
+        typography = typography,
         shapes = Shapes,
         content = content
     )
