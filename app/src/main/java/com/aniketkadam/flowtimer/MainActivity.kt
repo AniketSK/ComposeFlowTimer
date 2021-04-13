@@ -7,7 +7,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aniketkadam.flowtimer.ui.theme.FlowTimerTheme
 
 class MainActivity : ComponentActivity() {
@@ -15,10 +17,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             FlowTimerTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
-                }
+                val vm = viewModel<TimerVm>()
+                val timerState = vm.timerStateFlow.collectAsState()
+                TimerDisplay(timerState.value, vm::toggleStart)
             }
         }
     }
