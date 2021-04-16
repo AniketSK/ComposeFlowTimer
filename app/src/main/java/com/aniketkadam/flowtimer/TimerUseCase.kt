@@ -1,7 +1,10 @@
 package com.aniketkadam.flowtimer
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 class TimerUseCase(private val timerScope: CoroutineScope) {
 
@@ -12,8 +15,8 @@ class TimerUseCase(private val timerScope: CoroutineScope) {
 
     fun toggleTime(totalSeconds: Int) {
         if (job == null) {
-            job = timerScope.launch() {
-                initTimer(totalSeconds) { remainingTime -> TimerState(remainingTime) }
+            job = timerScope.launch {
+                initTimer(totalSeconds) { remainingTime -> TimerState(remainingTime, totalSeconds) }
                     .onCompletion { _timerStateFlow.emit(TimerState()) }
                     .collect { _timerStateFlow.emit(it) }
             }
