@@ -15,7 +15,15 @@ class TimerVm : ViewModel() {
     private val timerIntent = TimerUseCase(viewModelScope)
     val timerStateFlow: StateFlow<TimerState> = timerIntent.timerStateFlow
 
-    fun toggleStart() = timerIntent.toggleTime(60)
+    fun toggleStart(totalSeconds: Int) = timerIntent.toggleTime(totalSeconds)
+
+    fun toggleStart(totalSecondsString : String) {
+        val validSeconds = totalSecondsString.toIntOrNull()
+
+        if(validSeconds != null) {
+            toggleStart(validSeconds)
+        }
+    }
 }
 
 data class TimerState(
