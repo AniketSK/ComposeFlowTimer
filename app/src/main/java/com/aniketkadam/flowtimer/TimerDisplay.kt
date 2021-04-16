@@ -1,6 +1,5 @@
 package com.aniketkadam.flowtimer
 
-import android.os.VibrationEffect
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.CircularProgressIndicator

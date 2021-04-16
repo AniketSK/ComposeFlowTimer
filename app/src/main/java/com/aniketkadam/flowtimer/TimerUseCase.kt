@@ -27,7 +27,7 @@ class TimerUseCase(private val timerScope: CoroutineScope) {
      * The timer emits the total seconds immediately.
      * Each second after that, it will emit the next value.
      */
-    fun <DisplayState> initTimer(totalSeconds: Int, onTick: (Int) -> DisplayState): Flow<DisplayState> =
+    private fun <DisplayState> initTimer(totalSeconds: Int, onTick: (Int) -> DisplayState): Flow<DisplayState> =
 //        generateSequence(totalSeconds - 1 ) { it - 1 }.asFlow()
         (totalSeconds - 1 downTo 0).asFlow() // Emit total - 1 because the first was emitted onStart
             .onEach { delay(1000) } // Each second later emit a number
