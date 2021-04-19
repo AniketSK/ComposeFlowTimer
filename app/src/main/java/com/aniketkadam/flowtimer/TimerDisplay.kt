@@ -84,11 +84,11 @@ fun TimerDisplay(
 @Preview(showBackground = true)
 @Composable
 fun PreviewActiveTimerDisplay() {
-    TimerDisplay(timerState = TimerState(60), {})
+    TimerDisplay(timerState = TimerState(60, 60), {})
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewIdleTimerDisplay() {
-    TimerDisplay(timerState = TimerState(null), {})
+    TimerDisplay(timerState = TimerState(null, 60), {})
 }

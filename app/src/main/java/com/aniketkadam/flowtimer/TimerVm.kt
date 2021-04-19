@@ -28,7 +28,7 @@ class TimerVm : ViewModel() {
 
 data class TimerState(
     val secondsRemaining: Int? = null,
-    val totalSeconds: Int = 60,
+    val totalSeconds: Int,
     val textWhenStopped: String = "-"
 ) {
     val displaySeconds: String = (secondsRemaining ?: textWhenStopped).toString()

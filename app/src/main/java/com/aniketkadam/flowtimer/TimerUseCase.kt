@@ -8,21 +8,29 @@ import kotlinx.coroutines.launch
 
 class TimerUseCase(private val timerScope: CoroutineScope) {
 
-    private var _timerStateFlow = MutableStateFlow(TimerState())
+    private var _timerStateFlow = MutableStateFlow(TimerState(totalSeconds = 60))
     val timerStateFlow: StateFlow<TimerState> = _timerStateFlow
 
     private var job: Job? = null
 
+    /**
+     * It should be scheduled if:
+     * 1. The job was never started
+     * 2. Started and cancelled
+     * 3. Started and completed
+     *
+     */
     fun toggleTime(totalSeconds: Int) {
-        if (job == null) {
-            job = timerScope.launch {
+
+        job = if (job == null || job?.isCompleted == true) {
+            timerScope.launch {
                 initTimer(totalSeconds) { remainingTime -> TimerState(remainingTime, totalSeconds) }
-                    .onCompletion { _timerStateFlow.emit(TimerState()) }
+                    .onCompletion { _timerStateFlow.emit(TimerState(totalSeconds = totalSeconds)) }
                     .collect { _timerStateFlow.emit(it) }
             }
         } else {
             job?.cancel()
-            job = null
+            null
         }
     }
 
