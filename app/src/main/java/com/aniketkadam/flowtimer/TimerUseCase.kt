@@ -14,15 +14,15 @@ class TimerUseCase(private val timerScope: CoroutineScope) {
     private var job: Job? = null
 
     fun toggleTime(totalSeconds: Int) {
-        if (job == null) {
-            job = timerScope.launch {
+        job = if (job == null || job?.isCompleted == true) {
+            timerScope.launch {
                 initTimer(totalSeconds) { remainingTime -> TimerState(remainingTime, totalSeconds) }
                     .onCompletion { _timerStateFlow.emit(TimerState()) }
                     .collect { _timerStateFlow.emit(it) }
             }
         } else {
             job?.cancel()
-            job = null
+            null
         }
     }
 
