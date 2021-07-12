@@ -33,7 +33,8 @@ class TimerUseCaseTest {
             val t = TimerUseCase(this)
             t.toggleTime(60)
             val testObserver = t.timerStateFlow.test(this)
-            advanceTimeBy(10)
+            runCurrent()
+
             testObserver.assertValues(
                 TimerState(null, 60, "-"),
                 TimerState(60, 60, "-")
