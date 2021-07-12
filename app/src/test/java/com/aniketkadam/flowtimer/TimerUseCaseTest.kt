@@ -29,20 +29,30 @@ class TimerUseCaseTest {
 
     @Test
     fun `test flow with a helper function`() = runBlockingTest {
-        val t = TimerUseCase(this)
-        t.toggleTime(60)
-        val testObserver = t.timerStateFlow.test(this)
-        testObserver.assertValues(TimerState(60, 60, "-"))
+        pauseDispatcher {
+            val t = TimerUseCase(this)
+            t.toggleTime(60)
+            val testObserver = t.timerStateFlow.test(this)
+            advanceTimeBy(10)
+            testObserver.assertValues(
+                TimerState(null, 60, "-"),
+                TimerState(60, 60, "-")
+            )
 
-        advanceTimeBy(500)
-        testObserver.assertValues(TimerState(60, 60, "-"))
+            advanceTimeBy(500)
+            testObserver.assertValues(
+                TimerState(null, 60, "-"),
+                TimerState(60, 60, "-")
+            )
 
-        advanceTimeBy(550)
-        testObserver.assertValues(
-            TimerState(60, 60, "-"),
-            TimerState(59, 60, "-")
-        )
-        testObserver.finish()
+            advanceTimeBy(550)
+            testObserver.assertValues(
+                TimerState(null, 60, "-"),
+                TimerState(60, 60, "-"),
+                TimerState(59, 60, "-")
+            )
+            testObserver.finish()
+        }
     }
 
 }
